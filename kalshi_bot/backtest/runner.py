@@ -11,12 +11,26 @@ import json
 
 from kalshi_bot.backtest.engine import Backtester, BacktestResult
 from kalshi_bot.data.store import connect
-from kalshi_bot.strategies.base import Strategy
+from kalshi_bot.strategies.base import Context, Strategy
 from kalshi_bot.strategies.expiry_convergence import ExpiryConvergence
+from kalshi_bot.strategies.weather_edge import WeatherEdge
 
 STRATEGIES: dict[str, type[Strategy]] = {
     "expiry_convergence": ExpiryConvergence,
+    "weather_edge": WeatherEdge,
 }
+
+
+def load_context() -> Context:
+    """Load all stored external signals into a Context keyed by
+    (source, key, target_date); dict payloads are parsed from raw JSON."""
+    conn = connect()
+    signals = {}
+    for r in conn.execute("SELECT source, key, target_date, raw, value FROM external_signals"):
+        payload = json.loads(r["raw"]) if r["raw"] else r["value"]
+        signals[(r["source"], r["key"], r["target_date"])] = payload
+    conn.close()
+    return Context(signals=signals)
 
 
 def load_data(series: list[str], settled_only: bool = True):
@@ -51,7 +65,7 @@ def run(
 ) -> BacktestResult:
     markets, candles = load_data(series)
     bt = Backtester(starting_cash=starting_cash, max_position_per_market=max_position)
-    return bt.run(strategy, markets, candles)
+    return bt.run(strategy, markets, candles, context=load_context())
 
 
 def main() -> None:
