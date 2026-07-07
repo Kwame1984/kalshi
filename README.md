@@ -37,16 +37,21 @@ cp .env.example .env            # fill in credentials when you have them
 
 | Strategy | Evidence | Status |
 |----------|----------|--------|
-| theta_harvest — econ favorites 94-99c near close | 120d: +0.74% (8/8); **5y: −9.2% (175/185)** — 94.6% hit rate doesn't clear the ~96.5% breakeven | gated; awaiting bucket-level calibration verdict |
+| **tail_seller** — buy NO on bid-up deep-tail brackets ≤24h out (politics/econ/weather/entertainment) | ~3y backtest: **+13.2%**, 95.5% hit, max DD 16.2%, Sharpe 0.30 at full taker fees; derived from own calibration study (0-10c brackets win 0.3-1.7% vs 1.4-3.1c prices, 5 TRADEABLE flags) | **paper trading** |
+| theta_harvest — econ favorites 94-99c near close | 120d: +0.74% (8/8); 5y: −9.2% (175/185) — hit rate below ~96.5% breakeven | rejected as taker; maker variant may revisit |
+| sports_devig — book-line fair value vs Kalshi MLB | pre-game divergence mean 0.55c, max 1.3c — inside fees vs soft book | scanner; needs Pinnacle (The Odds API key) |
+| options_rv — Deribit RND vs BTC brackets | all brackets within taker fees (bot-crowded) | scanner; accumulating RND history |
 | structural arb scanner — partition + monotonicity | live scanner; correctly rejects threshold-ladder false positives | overlay |
-| options_rv — Deribit RND vs BTC brackets | live: all brackets within taker fees (bot-crowded) | scanner only; accumulating RND history |
-| weather_ensemble — GEFS mean+spread fair value | market wins all 7 cities (LL 0.319 vs 0.428, n=1896) | rejected |
+| weather_ensemble — GEFS mean+spread fair value | market wins all 7 cities (LL 0.319 vs 0.428) | rejected |
 | weather_edge — deterministic forecast | log-loss 0.408 vs market 0.325 → no edge | rejected |
 | expiry_convergence — naive favorite buying | −5.8% on weather brackets | rejected |
 
-Five of six tested strategies failed validation so far. That is the system
-working as designed: each rejection happened in the backtester or a live
-read-only scanner, at zero cost.
+One strategy earned paper promotion out of eight tested; the rest were
+rejected in the backtester or ship as read-only scanners. Every rejection
+cost $0. Watchlist from the calibration study: politics favorites 0.3-0.8
+(directionally +3 to +14c, underpowered n — recheck after more weekly
+settlements), entertainment 90c+ favorites (+2-3c, near-significant),
+in-play sports favorites (fee-clearing but unproven).
 
 Rejected/gated strategies are kept in-repo deliberately: they document what
 does not work and why. See docs/superpowers/specs/ for the full design and
