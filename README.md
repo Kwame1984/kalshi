@@ -35,13 +35,18 @@ cp .env.example .env            # fill in credentials when you have them
 
 ## Strategy status
 
-| Strategy | Backtest (120d) | Status |
-|----------|-----------------|--------|
-| theta_harvest — econ favorites 94-99c near close | +0.74%, 8/8, Sharpe 0.95 | paper |
-| structural arb scanner — partition + monotonicity | live scanner only | overlay |
-| weather_ensemble — ensemble forecast fair value | pending validation | gated off |
-| weather_edge — deterministic forecast | log-loss 0.408 vs market 0.325 → **no edge** | research only |
-| expiry_convergence — naive favorite buying | −5.8% (weather brackets) | rejected |
+| Strategy | Evidence | Status |
+|----------|----------|--------|
+| theta_harvest — econ favorites 94-99c near close | 120d: +0.74% (8/8); **5y: −9.2% (175/185)** — 94.6% hit rate doesn't clear the ~96.5% breakeven | gated; awaiting bucket-level calibration verdict |
+| structural arb scanner — partition + monotonicity | live scanner; correctly rejects threshold-ladder false positives | overlay |
+| options_rv — Deribit RND vs BTC brackets | live: all brackets within taker fees (bot-crowded) | scanner only; accumulating RND history |
+| weather_ensemble — GEFS mean+spread fair value | market wins all 7 cities (LL 0.319 vs 0.428, n=1896) | rejected |
+| weather_edge — deterministic forecast | log-loss 0.408 vs market 0.325 → no edge | rejected |
+| expiry_convergence — naive favorite buying | −5.8% on weather brackets | rejected |
+
+Five of six tested strategies failed validation so far. That is the system
+working as designed: each rejection happened in the backtester or a live
+read-only scanner, at zero cost.
 
 Rejected/gated strategies are kept in-repo deliberately: they document what
 does not work and why. See docs/superpowers/specs/ for the full design and
