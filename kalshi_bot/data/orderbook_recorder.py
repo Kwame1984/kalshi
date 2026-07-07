@@ -46,27 +46,30 @@ CREATE INDEX IF NOT EXISTS idx_oblog_ticker ON orderbook_log(ticker, recv_ts_ms)
 
 
 async def pick_top_markets(n: int) -> list[str]:
-    """Most liquid open markets by 24h volume across the exchange."""
+    """Most liquid open markets across our strategy series.
+
+    Exchange-wide GET /markets is useless here: the first 1000+ open markets
+    are all auto-generated KXMVE parlay combos, so a global page + filter
+    returns nothing. Query the series we actually trade instead.
+    """
+    from kalshi_bot.data.collector import SPORTS_CULTURE_SERIES, TARGET_SERIES
+
+    series = list(dict.fromkeys(TARGET_SERIES + SPORTS_CULTURE_SERIES))
     client = KalshiClient()
+    markets: list[dict] = []
     try:
-        resp = await client.get_markets(status="open", limit=1000)
-        markets = [
-            m for m in resp.get("markets", [])
-            # skip multivariate/parlay combos — bespoke books, not strategy targets
-            if not m.get("mve_collection_ticker")
-            and not m["ticker"].startswith("KXMVE")
-            # skip sub-hour crypto churners: ~100s of msgs/min of bot quoting,
-            # no strategy value, dominates storage
-            and not m["ticker"].startswith(("KXBTC15M", "KXETH15M", "KXBTCD-",
-                                            "KXETHD-"))
-        ]
-        markets.sort(
-            key=lambda m: float(m.get("volume_24h_fp") or m.get("volume_fp") or 0),
-            reverse=True,
-        )
-        return [m["ticker"] for m in markets[:n]]
+        for st in series:
+            resp = await client.get_markets(
+                series_ticker=st, status="open", limit=1000
+            )
+            markets.extend(resp.get("markets", []))
     finally:
         await client.aclose()
+    markets.sort(
+        key=lambda m: float(m.get("volume_24h_fp") or m.get("volume_fp") or 0),
+        reverse=True,
+    )
+    return [m["ticker"] for m in markets[:n]]
 
 
 def _auth_headers() -> dict[str, str]:
