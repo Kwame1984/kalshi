@@ -36,6 +36,10 @@ HIST_ECON_SERIES = ECON_SERIES + ["KXGDP", "KXJOBLESS"]
 #                  KXALBUMEQUIV (weekly album-equivalent sales brackets)
 #   Politics:      KXAPRPOTUS (weekly RCP presidential approval brackets),
 #                  KXTRUTHSOCIAL (weekly Trump Truth Social post-count brackets)
+WORLD_SERIES = [
+    "KXVENEZDEFACTO", "KXISRAELPM", "KXNEXTNATOSECGEN", "KXPRESTAIWAN",
+    "KXTAIWANLVL4", "KXUKRAINEEU", "KXZELENSKYPUTIN", "KXIRANDEMOCRACY",
+]
 SPORTS_CULTURE_SERIES = [
     "KXMLBGAME", "KXWNBAGAME", "KXATPMATCH", "KXUFCFIGHT",
     "KXNETFLIXRANKMOVIE", "KXALBUMEQUIV",

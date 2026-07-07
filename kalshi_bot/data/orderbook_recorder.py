@@ -52,9 +52,14 @@ async def pick_top_markets(n: int) -> list[str]:
     are all auto-generated KXMVE parlay combos, so a global page + filter
     returns nothing. Query the series we actually trade instead.
     """
-    from kalshi_bot.data.collector import SPORTS_CULTURE_SERIES, TARGET_SERIES
+    from kalshi_bot.data.collector import (
+        SPORTS_CULTURE_SERIES, TARGET_SERIES, WORLD_SERIES,
+    )
 
-    series = list(dict.fromkeys(TARGET_SERIES + SPORTS_CULTURE_SERIES))
+    # World/geopolitics series are always included regardless of volume:
+    # they are quiet between crises, and the quiet-period baseline is the
+    # whole point (insider-surge detection needs it)
+    series = list(dict.fromkeys(TARGET_SERIES + SPORTS_CULTURE_SERIES + WORLD_SERIES))
     client = KalshiClient()
     markets: list[dict] = []
     try:
@@ -69,7 +74,12 @@ async def pick_top_markets(n: int) -> list[str]:
         key=lambda m: float(m.get("volume_24h_fp") or m.get("volume_fp") or 0),
         reverse=True,
     )
-    return [m["ticker"] for m in markets[:n]]
+    picked = [m["ticker"] for m in markets[:n]]
+    world_prefixes = tuple(WORLD_SERIES)
+    for m in markets[n:]:
+        if m["ticker"].startswith(world_prefixes):
+            picked.append(m["ticker"])
+    return picked
 
 
 def _auth_headers() -> dict[str, str]:
