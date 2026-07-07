@@ -18,6 +18,14 @@ class Settings(BaseSettings):
 
     kalshi_api_key_id: str = ""
     kalshi_private_key_path: Path = Path("~/.kalshi/kalshi-private-key.pem")
+    # demo environment uses separate credentials (generated at demo.kalshi.co)
+    kalshi_demo_api_key_id: str = ""
+    kalshi_demo_private_key_path: Path = Path("~/.kalshi/keys/demo/demo-key.pem")
+
+    def credentials_for(self, mode: "TradingMode") -> tuple[str, Path]:
+        if mode == TradingMode.DEMO:
+            return self.kalshi_demo_api_key_id, self.kalshi_demo_private_key_path
+        return self.kalshi_api_key_id, self.kalshi_private_key_path
 
     trading_mode: TradingMode = TradingMode.PAPER
     live_trading_ack: str = "no"

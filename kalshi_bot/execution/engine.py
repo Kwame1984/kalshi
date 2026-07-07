@@ -207,9 +207,10 @@ def build(args: argparse.Namespace, settings: Settings) -> ExecutionEngine:
         executor = PaperExecutor(client, conn, starting_cash=args.bankroll)
     else:
         base = DEMO_BASE if mode == "demo" else PROD_BASE
+        key_id, key_path = settings.credentials_for(TradingMode(mode))
         client = KalshiClient(
-            api_key_id=settings.kalshi_api_key_id,
-            private_key_path=settings.kalshi_private_key_path,
+            api_key_id=key_id,
+            private_key_path=key_path,
             base_url=base,
         )
         executor = LiveExecutor(client, conn, settings, mode)
