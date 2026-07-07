@@ -11,14 +11,8 @@ import json
 
 from kalshi_bot.backtest.engine import Backtester, BacktestResult
 from kalshi_bot.data.store import connect
+from kalshi_bot.strategies import STRATEGIES
 from kalshi_bot.strategies.base import Context, Strategy
-from kalshi_bot.strategies.expiry_convergence import ExpiryConvergence
-from kalshi_bot.strategies.weather_edge import WeatherEdge
-
-STRATEGIES: dict[str, type[Strategy]] = {
-    "expiry_convergence": ExpiryConvergence,
-    "weather_edge": WeatherEdge,
-}
 
 
 def load_context() -> Context:

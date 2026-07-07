@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi Ops</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%230E1420'/><path d='M3 11 L6.5 6.5 L9 9 L13 4' stroke='%233E8CE8' stroke-width='2' fill='none' stroke-linecap='round'/></svg>">
+</head>
+<body>
+
+<header class="rail" id="rail">
+  <div class="rail-id">
+    <span class="pulse" id="pulse" title="heartbeat"></span>
+    <span class="rail-name">KALSHI&nbsp;OPS</span>
+  </div>
+  <div class="rail-cell">
+    <span class="cell-label">mode</span>
+    <span class="badge" id="mode-badge">—</span>
+  </div>
+  <div class="rail-cell">
+    <span class="cell-label">engine</span>
+    <span class="cell-value" id="engine-state">—</span>
+  </div>
+  <div class="rail-cell">
+    <span class="cell-label">heartbeat</span>
+    <span class="cell-value num" id="heartbeat-age">—</span>
+  </div>
+  <div class="rail-cell">
+    <span class="cell-label">daily P&amp;L</span>
+    <span class="cell-value num" id="daily-pnl">—</span>
+  </div>
+  <div class="rail-cell rail-halt" id="halt-cell" hidden>
+    <span class="cell-label">halted</span>
+    <span class="cell-value" id="halt-reason"></span>
+  </div>
+  <div class="rail-spacer"></div>
+  <button class="kill" id="kill-btn" data-state="idle" aria-live="polite">
+    <span class="kill-cover"></span>
+    <span class="kill-text" id="kill-text">KILL SWITCH</span>
+  </button>
+</header>
+
+<main class="grid">
+
+  <section class="panel panel-equity">
+    <div class="panel-head">
+      <h2>Equity</h2>
+      <div class="seg" id="equity-modes" role="tablist" aria-label="Equity mode">
+        <button role="tab" data-mode="paper" class="on">paper</button>
+        <button role="tab" data-mode="demo">demo</button>
+        <button role="tab" data-mode="live">live</button>
+      </div>
+      <span class="panel-stat num" id="equity-latest"></span>
+    </div>
+    <div class="chart-wrap" id="equity-chart-wrap">
+      <svg id="equity-chart" preserveAspectRatio="none" aria-label="Equity curve"></svg>
+      <div class="chart-tip" id="equity-tip" hidden></div>
+      <p class="empty" id="equity-empty" hidden>No equity points yet — the engine writes one per loop once it starts.</p>
+    </div>
+  </section>
+
+  <section class="panel panel-positions">
+    <div class="panel-head"><h2>Positions</h2><span class="panel-stat num" id="pos-total"></span></div>
+    <div class="tscroll">
+      <table id="positions-table">
+        <thead><tr>
+          <th>ticker</th><th>side</th><th class="r">avg</th><th class="r">last</th><th class="r">unrl P&amp;L</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="empty" id="positions-empty" hidden>No open positions.</p>
+  </section>
+
+  <section class="panel panel-fills">
+    <div class="panel-head"><h2>Fills</h2></div>
+    <div class="tscroll">
+      <table id="fills-table">
+        <thead><tr>
+          <th>time</th><th>ticker</th><th>side</th><th class="r">qty</th><th class="r">price</th><th class="r">fee</th><th>strategy</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="empty" id="fills-empty" hidden>No fills yet.</p>
+  </section>
+
+  <section class="panel panel-signals">
+    <div class="panel-head"><h2>Signals</h2></div>
+    <div class="tscroll">
+      <table id="signals-table">
+        <thead><tr>
+          <th>time</th><th>ticker</th><th>side</th><th class="r">fair</th><th class="r">mkt</th><th class="r">edge</th><th>acted</th><th>reason</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="empty" id="signals-empty" hidden>No signals yet.</p>
+  </section>
+
+  <section class="panel panel-watchlist">
+    <div class="panel-head">
+      <h2>Watchlist</h2>
+      <div class="seg" id="watch-status">
+        <button data-status="active" class="on">active</button>
+        <button data-status="">all</button>
+      </div>
+    </div>
+    <div id="watchlist"></div>
+    <p class="empty" id="watchlist-empty" hidden>No markets stored — run the collector to populate the markets table.</p>
+  </section>
+
+  <section class="panel panel-backtests" id="backtests-panel" hidden>
+    <div class="panel-head"><h2>Backtests</h2></div>
+    <div id="backtests"></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span id="conn-state" class="conn">connecting…</span>
+  <span id="refresh-note"></span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
