@@ -281,3 +281,96 @@ async def fetch_mlb_moneylines(
             espn_id=str(event.get("id", "")),
         ))
     return games
+
+# ---------------------------------------------------------------------------
+# The Odds API (the-odds-api.com) — sharp-book reference (Pinnacle via eu)
+# ---------------------------------------------------------------------------
+
+ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/{sport}/odds"
+
+# The Odds API team names are full names; map to ESPN abbreviations used by
+# GameOdds/ESPN_TO_KALSHI. MLB only for now.
+ODDS_API_MLB_NAMES = {
+    "Arizona Diamondbacks": "ARI", "Atlanta Braves": "ATL",
+    "Baltimore Orioles": "BAL", "Boston Red Sox": "BOS",
+    "Chicago Cubs": "CHC", "Chicago White Sox": "CHW",
+    "Cincinnati Reds": "CIN", "Cleveland Guardians": "CLE",
+    "Colorado Rockies": "COL", "Detroit Tigers": "DET",
+    "Houston Astros": "HOU", "Kansas City Royals": "KC",
+    "Los Angeles Angels": "LAA", "Los Angeles Dodgers": "LAD",
+    "Miami Marlins": "MIA", "Milwaukee Brewers": "MIL",
+    "Minnesota Twins": "MIN", "New York Mets": "NYM",
+    "New York Yankees": "NYY", "Athletics": "ATH",
+    "Oakland Athletics": "ATH", "Philadelphia Phillies": "PHI",
+    "Pittsburgh Pirates": "PIT", "San Diego Padres": "SD",
+    "San Francisco Giants": "SF", "Seattle Mariners": "SEA",
+    "St. Louis Cardinals": "STL", "Tampa Bay Rays": "TB",
+    "Texas Rangers": "TEX", "Toronto Blue Jays": "TOR",
+    "Washington Nationals": "WSH",
+}
+
+
+async def fetch_odds_api_moneylines(
+    api_key: str,
+    sport: str = "baseball_mlb",
+    prefer_books: tuple[str, ...] = ("pinnacle", "lowvig", "betonlineag"),
+    client: httpx.AsyncClient | None = None,
+) -> list[GameOdds]:
+    """Sharp-book moneylines via The Odds API.
+
+    Costs 1 credit per call (h2h x eu). Prefers Pinnacle; falls back down
+    prefer_books, then any available bookmaker. Provider records which book
+    actually supplied the line — callers should check it.
+    """
+    own_client = client is None
+    client = client or httpx.AsyncClient(timeout=30)
+    try:
+        r = await client.get(
+            ODDS_API_URL.format(sport=sport),
+            params={
+                "apiKey": api_key,
+                "regions": "eu",
+                "markets": "h2h",
+                "oddsFormat": "american",
+            },
+        )
+        r.raise_for_status()
+        remaining = r.headers.get("x-requests-remaining")
+        data = r.json()
+    finally:
+        if own_client:
+            await client.aclose()
+
+    games: list[GameOdds] = []
+    for ev in data:
+        home_name, away_name = ev.get("home_team"), ev.get("away_team")
+        home = ODDS_API_MLB_NAMES.get(home_name)
+        away = ODDS_API_MLB_NAMES.get(away_name)
+        if not home or not away:
+            continue
+        books = {b["key"]: b for b in ev.get("bookmakers", [])}
+        chosen = next((books[k] for k in prefer_books if k in books), None)
+        if chosen is None and books:
+            chosen = next(iter(books.values()))
+        ml_home = ml_away = None
+        if chosen:
+            for mkt in chosen.get("markets", []):
+                if mkt["key"] != "h2h":
+                    continue
+                for o in mkt.get("outcomes", []):
+                    if o["name"] == home_name:
+                        ml_home = float(o["price"])
+                    elif o["name"] == away_name:
+                        ml_away = float(o["price"])
+        start = dt.datetime.fromisoformat(
+            ev["commence_time"].replace("Z", "+00:00"))
+        games.append(GameOdds(
+            home=home, away=away, start_time=start,
+            ml_home=ml_home, ml_away=ml_away,
+            provider=(chosen or {}).get("key", ""),
+            state="pre" if start > dt.datetime.now(dt.UTC) else "in",
+            espn_id="",
+        ))
+    if remaining is not None:
+        print(f"[odds-api] credits remaining this month: {remaining}")
+    return games

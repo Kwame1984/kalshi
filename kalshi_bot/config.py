@@ -27,6 +27,8 @@ class Settings(BaseSettings):
             return self.kalshi_demo_api_key_id, self.kalshi_demo_private_key_path
         return self.kalshi_api_key_id, self.kalshi_private_key_path
 
+    odds_api_key: str = ""  # the-odds-api.com; free tier 500 credits/month
+
     trading_mode: TradingMode = TradingMode.PAPER
     live_trading_ack: str = "no"
 

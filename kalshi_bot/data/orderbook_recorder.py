@@ -19,6 +19,7 @@ import asyncio
 import json
 import logging
 import time
+import zlib
 
 import websockets
 
@@ -54,6 +55,10 @@ async def pick_top_markets(n: int) -> list[str]:
             # skip multivariate/parlay combos — bespoke books, not strategy targets
             if not m.get("mve_collection_ticker")
             and not m["ticker"].startswith("KXMVE")
+            # skip sub-hour crypto churners: ~100s of msgs/min of bot quoting,
+            # no strategy value, dominates storage
+            and not m["ticker"].startswith(("KXBTC15M", "KXETH15M", "KXBTCD-",
+                                            "KXETHD-"))
         ]
         markets.sort(
             key=lambda m: float(m.get("volume_24h_fp") or m.get("volume_fp") or 0),
@@ -102,27 +107,35 @@ async def record(tickers: list[str], duration: float | None = None) -> None:
                 WS_URL, additional_headers=_auth_headers(), ping_interval=10
             ) as ws:
                 backoff = 1.0
-                await ws.send(json.dumps({
-                    "id": 1,
-                    "cmd": "subscribe",
-                    "params": {
-                        "channels": ["orderbook_delta", "ticker", "trade"],
-                        "market_tickers": tickers,
-                    },
-                }))
-                log.info("subscribed to %d tickers", len(tickers))
+                # One subscribe per channel: combined multi-channel commands
+                # error ("Params required") and 'trade' then falls back to an
+                # exchange-wide subscription. ticker channel omitted entirely.
+                for i, channel in enumerate(["orderbook_delta", "trade"], start=1):
+                    await ws.send(json.dumps({
+                        "id": i,
+                        "cmd": "subscribe",
+                        "params": {
+                            "channels": [channel],
+                            "market_tickers": tickers,
+                        },
+                    }))
+                log.info("subscribes sent for %d tickers", len(tickers))
                 batch = []
                 last_commit = time.time()
                 async for raw in ws:
                     now_ms = int(time.time() * 1000)
                     msg = json.loads(raw)
                     mtype = msg.get("type", "")
+                    if mtype in ("subscribed", "error", "ok"):
+                        log.info("control msg: %s", raw[:300])
+                        continue
                     m = msg.get("msg", {})
-                    if mtype in ("orderbook_snapshot", "orderbook_delta",
-                                 "ticker", "trade"):
+                    if mtype in ("orderbook_snapshot", "orderbook_delta", "trade"):
+                        payload = raw if isinstance(raw, str) else raw.decode()
                         batch.append((
                             now_ms, mtype, m.get("market_ticker") or m.get("ticker"),
-                            msg.get("seq"), raw if isinstance(raw, str) else raw.decode(),
+                            msg.get("seq"),
+                            zlib.compress(payload.encode(), level=6),
                         ))
                     if batch and (len(batch) >= 200 or time.time() - last_commit > 5):
                         conn.executemany(

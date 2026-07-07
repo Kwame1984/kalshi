@@ -141,23 +141,36 @@ def persist(snapshots: list[dict]) -> None:
 async def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", help="ET game date YYYY-MM-DD (default: today ET)")
+    ap.add_argument("--source", choices=["auto", "espn", "odds-api"], default="auto",
+                    help="odds source; auto = odds-api (Pinnacle) if key set")
     args = ap.parse_args()
     game_date = (dt.date.fromisoformat(args.date) if args.date
                  else dt.datetime.now(ET).date())
     now = dt.datetime.now(dt.timezone.utc)
 
+    from kalshi_bot.config import get_settings
+    odds_key = get_settings().odds_api_key
+    use_sharp = args.source == "odds-api" or (args.source == "auto" and odds_key)
+
     kalshi = KalshiClient()
     try:
+        if use_sharp:
+            book_task = sportsbook.fetch_odds_api_moneylines(odds_key)
+        else:
+            book_task = sportsbook.fetch_mlb_moneylines(game_date)
         events, games = await asyncio.gather(
-            fetch_todays_events(kalshi, game_date),
-            sportsbook.fetch_mlb_moneylines(game_date),
+            fetch_todays_events(kalshi, game_date), book_task,
         )
         provs = sorted({g.provider for g in games if g.provider})
-        print(f"{game_date} ET: espn {len(games)} games "
+        print(f"{game_date} ET: book {len(games)} games "
               f"(providers: {', '.join(provs) or 'none'}), "
               f"kalshi {len(events)} {SERIES} events")
-        print("NOTE: single soft-book line (not Pinnacle-sharp); "
-              "divergence measurement, not fair value.")
+        if use_sharp:
+            print("Source: The Odds API eu region — check providers above; "
+                  "'pinnacle' devig is a credible fair value.")
+        else:
+            print("NOTE: single soft-book line (not Pinnacle-sharp); "
+                  "divergence measurement, not fair value.")
 
         strategy = SportsDevig()
         strategy_taker = SportsDevig(prefer_maker=False)
