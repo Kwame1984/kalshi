@@ -1,0 +1,168 @@
+[odds-api] credits remaining this month: 498
+2026-07-07 ET: book 15 games (providers: betonlineag, pinnacle), kalshi 16 KXMLBGAME events
+Source: The Odds API eu region — check providers above; 'pinnacle' devig is a credible fair value.
+
+=== KXMLBGAME-26JUL071415MILSTLG1  MIL@STL  first pitch 14:16 ET (9.3h) [pre-game]  betonlineag ml MIL -177 / STL +160 (overround 2.4%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       MIL  0.630  0.640  0.635  0.6243  0.6286  0.6272   -0.036   -0.016  
+       STL  0.360  0.370  0.365  0.3757  0.3714  0.3728   -0.014    0.006  
+
+=== KXMLBGAME-26JUL071835CHCBAL  CHC@BAL  first pitch 18:36 ET (13.7h) [pre-game]  pinnacle ml CHC -114 / BAL +103 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       CHC  0.510  0.530  0.520  0.5196  0.5203  0.5200   -0.030   -0.010  
+       BAL  0.470  0.490  0.480  0.4804  0.4797  0.4800   -0.030   -0.010  
+
+=== KXMLBGAME-26JUL071840ATHDET  ATH@DET  first pitch 18:41 ET (13.8h) [pre-game]  pinnacle ml ATH +153 / DET -170 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       ATH  0.370  0.380  0.375  0.3857  0.3814  0.3828   -0.014    0.006  
+       DET  0.620  0.630  0.625  0.6143  0.6186  0.6172   -0.036   -0.016  
+
+=== KXMLBGAME-26JUL071840ATLPIT  ATL@PIT  first pitch 18:41 ET (13.8h) [pre-game]  pinnacle ml ATL +146 / PIT -162 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       ATL  0.390  0.400  0.395  0.3967  0.3929  0.3941   -0.023   -0.003  
+       PIT  0.600  0.610  0.605  0.6033  0.6071  0.6059   -0.027   -0.007  
+
+=== KXMLBGAME-26JUL071840SEAMIA  SEA@MIA  first pitch 18:41 ET (13.8h) [pre-game]  betonlineag ml SEA +102 / MIA -112 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       SEA  0.480  0.490  0.485  0.4838  0.4832  0.4834   -0.026   -0.006  
+       MIA  0.510  0.520  0.515  0.5162  0.5168  0.5166   -0.024   -0.004  
+
+=== KXMLBGAME-26JUL071840NYYTB  NYY@TB  first pitch 18:41 ET (13.8h) [pre-game]  pinnacle ml NYY +105 / TB -116 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       NYY  0.470  0.480  0.475  0.4760  0.4751  0.4754   -0.024   -0.004  
+        TB  0.520  0.530  0.525  0.5240  0.5249  0.5246   -0.026   -0.006  
+
+=== KXMLBGAME-26JUL071845HOUWSH  HOU@WSH  first pitch 18:46 ET (13.8h) [pre-game]  pinnacle ml HOU +104 / WSH -115 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       HOU  0.470  0.480  0.475  0.4782  0.4774  0.4777   -0.022   -0.002  
+       WSH  0.520  0.530  0.525  0.5218  0.5226  0.5223   -0.028   -0.008  
+
+=== KXMLBGAME-26JUL071910PHICIN  PHI@CIN  first pitch 19:10 ET (14.2h) [pre-game]  betonlineag ml PHI -165 / CIN +149 (overround 2.4%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       PHI  0.610  0.620  0.615  0.6079  0.6118  0.6105   -0.032   -0.012  
+       CIN  0.380  0.390  0.385  0.3921  0.3882  0.3895   -0.018    0.002  
+
+=== KXMLBGAME-26JUL071910KCNYM  KC@NYM  first pitch 19:11 ET (14.3h) [pre-game]  betonlineag ml KC +134 / NYM -148 (overround 2.4%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+        KC  0.420  0.430  0.425  0.4173  0.4143  0.4153   -0.033   -0.013  
+       NYM  0.580  0.590  0.585  0.5827  0.5857  0.5847   -0.027   -0.007  
+
+=== KXMLBGAME-26JUL071940BOSCWS  BOS@CHW  first pitch 19:41 ET (14.8h) [pre-game]  pinnacle ml BOS -121 / CHW +110 (overround 2.4%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       BOS  0.530  0.540  0.535  0.5348  0.5361  0.5357   -0.025   -0.005  
+       CWS  0.460  0.470  0.465  0.4652  0.4639  0.4643   -0.025   -0.005  
+
+=== KXMLBGAME-26JUL071940CLEMIN  CLE@MIN  first pitch 19:41 ET (14.8h) [pre-game]  pinnacle ml CLE +102 / MIN -112 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       CLE  0.470  0.480  0.475  0.4838  0.4832  0.4834   -0.016    0.004  
+       MIN  0.520  0.530  0.525  0.5162  0.5168  0.5166   -0.034   -0.014  
+
+=== KXMLBGAME-26JUL072005LAATEX  LAA@TEX  first pitch 20:06 ET (15.2h) [pre-game]  pinnacle ml LAA +143 / TEX -159 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       LAA  0.410  0.420  0.415  0.4013  0.3976  0.3988   -0.039   -0.019  
+       TEX  0.590  0.610  0.600  0.5987  0.6024  0.6012   -0.031   -0.011  
+
+=== KXMLBGAME-26JUL072140AZSD  ARI@SD  first pitch 21:41 ET (16.8h) [pre-game]  betonlineag ml ARI +113 / SD -125 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+        AZ  0.460  0.470  0.465  0.4580  0.4565  0.4570   -0.032   -0.012  
+        SD  0.540  0.550  0.545  0.5420  0.5435  0.5430   -0.028   -0.008  
+
+=== KXMLBGAME-26JUL072145TORSF  TOR@SF  first pitch 21:46 ET (16.8h) [pre-game]  betonlineag ml TOR -113 / SF +103 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       TOR  0.500  0.510  0.505  0.5185  0.5192  0.5190   -0.011    0.009  
+        SF  0.490  0.500  0.495  0.4815  0.4808  0.4810   -0.039   -0.019  
+
+=== KXMLBGAME-26JUL072210COLLAD  COL@LAD  first pitch 22:11 ET (17.3h) [pre-game]  pinnacle ml COL +227 / LAD -260 (overround 2.8%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       COL  0.290  0.300  0.295  0.2975  0.2889  0.2918   -0.023   -0.003  
+       LAD  0.700  0.710  0.705  0.7025  0.7111  0.7082   -0.027   -0.007  
+
+pre-game games compared: 15 | in-play skipped: 0 | no book line: 0
+|kalshi mid - devig fair (mult)| across 30 markets: mean 0.0052, median 0.0031, max 0.0137
+stored 15 event snapshot(s) to external_signals (source=sportsbook_devig)
+
+signals passing SportsDevig gates (maker or taker): NONE
+[odds-api] credits remaining this month: 497
+2026-07-07 ET: book 15 games (providers: pinnacle), kalshi 16 KXMLBGAME events
+Source: The Odds API eu region — check providers above; 'pinnacle' devig is a credible fair value.
+
+=== KXMLBGAME-26JUL071415MILSTLG1  MIL@STL  first pitch 14:16 ET (7.3h) [pre-game]  pinnacle ml MIL -175 / STL +157 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       MIL  0.630  0.640  0.635  0.6206  0.6251  0.6236   -0.039   -0.019  
+       STL  0.360  0.370  0.365  0.3794  0.3749  0.3764   -0.011    0.009  
+
+=== KXMLBGAME-26JUL071835CHCBAL  CHC@BAL  first pitch 18:36 ET (11.7h) [pre-game]  pinnacle ml CHC -113 / BAL +102 (overround 2.6%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       CHC  0.520  0.530  0.525  0.5173  0.5179  0.5177   -0.033   -0.013  
+       BAL  0.470  0.490  0.480  0.4827  0.4821  0.4823   -0.027   -0.007  
+
+=== KXMLBGAME-26JUL071840ATHDET  ATH@DET  first pitch 18:41 ET (11.8h) [pre-game]  pinnacle ml ATH +155 / DET -173 (overround 2.6%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       ATH  0.370  0.380  0.375  0.3823  0.3778  0.3792   -0.018    0.002  
+       DET  0.620  0.630  0.625  0.6177  0.6222  0.6208   -0.032   -0.012  
+
+=== KXMLBGAME-26JUL071840ATLPIT  ATL@PIT  first pitch 18:41 ET (11.8h) [pre-game]  pinnacle ml ATL +146 / PIT -162 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       ATL  0.390  0.400  0.395  0.3967  0.3929  0.3941   -0.023   -0.003  
+       PIT  0.600  0.610  0.605  0.6033  0.6071  0.6059   -0.027   -0.007  
+
+=== KXMLBGAME-26JUL071840SEAMIA  SEA@MIA  first pitch 18:41 ET (11.8h) [pre-game]  pinnacle ml SEA +102 / MIA -113 (overround 2.6%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       SEA  0.470  0.480  0.475  0.4827  0.4821  0.4823   -0.017    0.003  
+       MIA  0.520  0.530  0.525  0.5173  0.5179  0.5177   -0.033   -0.013  
+
+=== KXMLBGAME-26JUL071840NYYTB  NYY@TB  first pitch 18:41 ET (11.8h) [pre-game]  pinnacle ml NYY +105 / TB -115 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       NYY  0.470  0.480  0.475  0.4770  0.4762  0.4765   -0.023   -0.003  
+        TB  0.520  0.530  0.525  0.5230  0.5238  0.5235   -0.027   -0.007  
+
+=== KXMLBGAME-26JUL071845HOUWSH  HOU@WSH  first pitch 18:46 ET (11.8h) [pre-game]  pinnacle ml HOU +105 / WSH -116 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       HOU  0.470  0.480  0.475  0.4760  0.4751  0.4754   -0.024   -0.004  
+       WSH  0.520  0.530  0.525  0.5240  0.5249  0.5246   -0.026   -0.006  
+
+=== KXMLBGAME-26JUL071910PHICIN  PHI@CIN  first pitch 19:10 ET (12.2h) [pre-game]  pinnacle ml PHI -167 / CIN +149 (overround 2.7%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       PHI  0.610  0.620  0.615  0.6090  0.6134  0.6119   -0.031   -0.011  
+       CIN  0.380  0.390  0.385  0.3910  0.3866  0.3881   -0.019    0.001  
+
+=== KXMLBGAME-26JUL071910KCNYM  KC@NYM  first pitch 19:11 ET (12.3h) [pre-game]  pinnacle ml KC +131 / NYM -145 (overround 2.5%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+        KC  0.420  0.430  0.425  0.4225  0.4196  0.4205   -0.028   -0.008  
+       NYM  0.580  0.590  0.585  0.5775  0.5804  0.5795   -0.032   -0.012  
+
+=== KXMLBGAME-26JUL071940BOSCWS  BOS@CHW  first pitch 19:41 ET (12.8h) [pre-game]  pinnacle ml BOS -121 / CHW +110 (overround 2.4%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       BOS  0.530  0.540  0.535  0.5348  0.5361  0.5357   -0.025   -0.005  
+       CWS  0.460  0.470  0.465  0.4652  0.4639  0.4643   -0.025   -0.005  
+
+=== KXMLBGAME-26JUL071940CLEMIN  CLE@MIN  first pitch 19:41 ET (12.8h) [pre-game]  pinnacle ml CLE +100 / MIN -111 (overround 2.6%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       CLE  0.470  0.490  0.480  0.4873  0.4868  0.4870   -0.023   -0.003  
+       MIN  0.520  0.530  0.525  0.5127  0.5132  0.5130   -0.037   -0.017  
+
+=== KXMLBGAME-26JUL072005LAATEX  LAA@TEX  first pitch 20:06 ET (13.2h) [pre-game]  pinnacle ml LAA +143 / TEX -160 (overround 2.7%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       LAA  0.410  0.420  0.415  0.4007  0.3968  0.3981   -0.039   -0.019  
+       TEX  0.600  0.610  0.605  0.5993  0.6032  0.6019   -0.031   -0.011  
+
+=== KXMLBGAME-26JUL072140AZSD  ARI@SD  first pitch 21:41 ET (14.8h) [pre-game]  pinnacle ml ARI +111 / SD -122 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+        AZ  0.460  0.470  0.465  0.4631  0.4618  0.4622   -0.027   -0.007  
+        SD  0.530  0.540  0.535  0.5369  0.5382  0.5378   -0.023   -0.003  
+
+=== KXMLBGAME-26JUL072145TORSF  TOR@SF  first pitch 21:46 ET (14.8h) [pre-game]  pinnacle ml TOR -112 / SF +102 (overround 2.3%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       TOR  0.500  0.510  0.505  0.5162  0.5168  0.5166   -0.014    0.006  
+        SF  0.490  0.500  0.495  0.4838  0.4832  0.4834   -0.036   -0.016  
+
+=== KXMLBGAME-26JUL072210COLLAD  COL@LAD  first pitch 22:11 ET (15.3h) [pre-game]  pinnacle ml COL +220 / LAD -251 (overround 2.8%)
+    market  k.bid  k.ask    mid  fair.m  fair.p  fair.s  tkrEdge  mkrEdge  signal
+       COL  0.290  0.300  0.295  0.3041  0.2960  0.2987   -0.016    0.004  
+       LAD  0.710  0.720  0.715  0.6959  0.7040  0.7013   -0.044   -0.024  
+
+pre-game games compared: 15 | in-play skipped: 0 | no book line: 0
+|kalshi mid - devig fair (mult)| across 30 markets: mean 0.0065, median 0.0066, max 0.0191
+stored 15 event snapshot(s) to external_signals (source=sportsbook_devig)
+
+signals passing SportsDevig gates (maker or taker): NONE

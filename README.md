@@ -74,3 +74,18 @@ Market data and paper trading need no credentials. For demo trading: sign up
 at demo.kalshi.co, generate an API key in settings, put the key ID in .env and
 the PEM at `~/.kalshi/`. For live: same at kalshi.com — plus flip the two
 gates above, deliberately.
+
+## High-risk program (2026-07-07)
+
+| Strategy | Verdict | Risk profile (bootstrap) |
+|----------|---------|---------------------------------------|
+| cumulative_momentum — buy re-priced tails in trending series | **validated, paper trading**; +32%/$ staked, but 90% CI on mean P&L still spans zero (n=25) | positive skew; ruin ~1% at 5%/trade; full Kelly 18% (do not use); half-Kelly ruin 11% |
+| perception_gap — fade Kalshi-vs-Pinnacle divergence (maker) | live paper, event-driven (dormant until gaps ≥3c) | untested — awaiting live gap events |
+| tail_seller (contrast: the low-risk mirror) | paper trading | skew −4.3, avg loss 20x avg win, CVaR95 $21/trade, median max DD 17%, p95 36.5%, ruin 0.04% at half-Kelly |
+| panic_fade — buy abandoned in-play favorites | **rejected at taker** (−9c/contract; touch edges were hindsight artifacts); maker ≤25c variant pending L2 fill data | n/a |
+| insider_surge — tailgate volume surges | **rejected on testable categories** (surges anti-predictive in politics/entertainment; insider wins live in geopolitics we haven't backfilled) | n/a |
+| catalyst_follow — political hard-news follow / debate fade | research-only (needs catalyst calendar; tiny n) | n/a |
+
+Sizing law from the profiles: 5%/trade is the ceiling
+for the momentum family (ruin 1.1%); tail-selling tolerates more trades but
+its 20:1 loss ratio makes per-event caps the binding constraint.

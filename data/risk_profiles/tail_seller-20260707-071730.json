@@ -1,0 +1,161 @@
+{
+ "strategy": "tail_seller",
+ "series": [
+  "KXAPRPOTUS",
+  "KXTRUTHSOCIAL",
+  "KXNETFLIXRANKMOVIE",
+  "KXALBUMEQUIV",
+  "KXCPI",
+  "KXCPIYOY",
+  "KXFED",
+  "KXPAYROLLS",
+  "KXU3",
+  "KXHIGHNY",
+  "KXHIGHCHI",
+  "KXHIGHMIA",
+  "KXHIGHAUS",
+  "KXHIGHDEN",
+  "KXHIGHLAX",
+  "KXHIGHPHIL"
+ ],
+ "source": "fresh backtest",
+ "backtest_metrics": {
+  "trades": 1676,
+  "markets_settled": 1671,
+  "hit_rate": 0.9551166965888689,
+  "return": 0.13184500000006527,
+  "final_equity": 1131.85,
+  "total_fees": 151.43,
+  "max_drawdown": 0.1623,
+  "sharpe_daily_ann": 0.3
+ },
+ "ran_at": "2026-07-07T12:17:30.071915+00:00",
+ "starting_cash": 1000.0,
+ "n_trades": 1671,
+ "warnings": [],
+ "profile": {
+  "summary": {
+   "n": 1671,
+   "mean": 0.07556852184320764,
+   "median": 1.16,
+   "std": 5.149842248610282,
+   "skew": -4.340232709936962,
+   "excess_kurtosis": 17.030863792263535,
+   "win_rate": 0.9551166965888689,
+   "avg_win": 1.1872274436090227,
+   "avg_loss": -23.58053333333333,
+   "profit_factor": 1.0714007034050685,
+   "max_single_loss": -24.31,
+   "total_pnl": 126.27499999999996
+  },
+  "var_cvar": {
+   "95": {
+    "alpha": 0.95,
+    "var": -0.69,
+    "cvar": 20.980119047619045,
+    "tail_n": 84
+   },
+   "99": {
+    "alpha": 0.99,
+    "var": 24.07,
+    "cvar": 24.16882352941176,
+    "tail_n": 17
+   }
+  },
+  "drawdown_bootstrap": {
+   "n_trades": 1671,
+   "horizon": 1671,
+   "n_paths": 10000,
+   "starting_equity": 1000.0,
+   "block_len": 10,
+   "iid": {
+    "max_drawdown": {
+     "p5": 0.08698585357779691,
+     "p25": 0.1270541690888945,
+     "p50": 0.17005624136740977,
+     "p75": 0.23497219055157265,
+     "p95": 0.3648584026580484
+    },
+    "terminal_equity": {
+     "p5": 769.4135,
+     "p25": 981.3387499999999,
+     "p50": 1125.7424999999998,
+     "p75": 1269.485,
+     "p95": 1468.3149999999998
+    }
+   },
+   "block": {
+    "max_drawdown": {
+     "p5": 0.08713883544518707,
+     "p25": 0.12751892129315884,
+     "p50": 0.1710883815243453,
+     "p75": 0.2347443254859164,
+     "p95": 0.3638102763870198
+    },
+    "terminal_equity": {
+     "p5": 772.0942499999999,
+     "p25": 987.7624999999999,
+     "p50": 1132.085,
+     "p75": 1268.6712499999999,
+     "p95": 1471.2209999999998
+    }
+   }
+  },
+  "kelly": {
+   "full_kelly": 0.06057692773053941,
+   "half_kelly": 0.030288463865269705,
+   "quarter_kelly": 0.015144231932634852,
+   "growth_per_trade_full": 9.460174090672415e-05,
+   "growth_per_trade_half": 7.0485910483836e-05,
+   "growth_per_trade_quarter": 4.087077131753648e-05,
+   "mean_return_per_dollar_staked": 0.0030633076700952765,
+   "stake_basis": "per-trade stakes"
+  },
+  "risk_of_ruin": {
+   "0.05": {
+    "sizing_fraction": 0.05,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.0343,
+    "median_terminal_equity": 1100.834830441948
+   },
+   "0.10": {
+    "sizing_fraction": 0.1,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.3025,
+    "median_terminal_equity": 1062.6223245155
+   },
+   "0.25": {
+    "sizing_fraction": 0.25,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.817,
+    "median_terminal_equity": 374.600769358971
+   },
+   "half_kelly": {
+    "sizing_fraction": 0.030288463865269705,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.0004,
+    "median_terminal_equity": 1075.9377113997873
+   }
+  },
+  "annualized": {
+   "start": "2021-06-30",
+   "end": "2026-07-06",
+   "years": 5.01574264202601,
+   "total_return": 0.13184500000006527,
+   "annualized_return": 0.024999438979683486,
+   "annualized_vol": 0.10077674995405649,
+   "sharpe": 0.2957733741874242,
+   "sortino": 0.13202260224917103,
+   "max_drawdown": 0.13975208368946157,
+   "calmar": 0.17888419492358987
+  }
+ }
+}

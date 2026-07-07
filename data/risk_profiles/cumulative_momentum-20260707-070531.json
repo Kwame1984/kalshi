@@ -1,0 +1,175 @@
+{
+ "strategy": "cumulative_momentum",
+ "series": [
+  "KXTRUTHSOCIAL",
+  "KXAPRPOTUS",
+  "KXALBUMEQUIV",
+  "KXNETFLIXRANKMOVIE"
+ ],
+ "source": "fresh backtest",
+ "backtest_metrics": {
+  "trades": 25,
+  "markets_settled": 25,
+  "hit_rate": 0.48,
+  "return": 0.03633000000000042,
+  "final_equity": 1036.33,
+  "total_fees": 4.83,
+  "max_drawdown": 0.0223,
+  "sharpe_daily_ann": 0.78
+ },
+ "ran_at": "2026-07-07T12:05:31.939109+00:00",
+ "starting_cash": 1000.0,
+ "n_trades": 25,
+ "warnings": [
+  "SMALL SAMPLE: only 25 settled trades (<30). Point estimates below are unreliable \u2014 read the 90% bootstrap CIs instead, and treat Kelly/ruin numbers as indicative only."
+ ],
+ "profile": {
+  "summary": {
+   "n": 25,
+   "mean": 1.4531999999999996,
+   "median": -3.9,
+   "std": 6.055488364560974,
+   "skew": 0.0748666269749997,
+   "excess_kurtosis": -2.067192237170127,
+   "win_rate": 0.48,
+   "avg_win": 7.6241666666666665,
+   "avg_loss": -4.243076923076924,
+   "profit_factor": 1.6586294416243652,
+   "max_single_loss": -4.64,
+   "total_pnl": 36.32999999999999
+  },
+  "var_cvar": {
+   "95": {
+    "alpha": 0.95,
+    "var": 4.64,
+    "cvar": 4.64,
+    "tail_n": 2
+   },
+   "99": {
+    "alpha": 0.99,
+    "var": 4.64,
+    "cvar": 4.64,
+    "tail_n": 1
+   }
+  },
+  "drawdown_bootstrap": {
+   "n_trades": 25,
+   "horizon": 25,
+   "n_paths": 10000,
+   "starting_equity": 1000.0,
+   "block_len": 10,
+   "iid": {
+    "max_drawdown": {
+     "p5": 0.008451088764188229,
+     "p25": 0.012736237645602052,
+     "p50": 0.017104893534134913,
+     "p75": 0.02361736184455914,
+     "p95": 0.035472155717762494
+    },
+    "terminal_equity": {
+     "p5": 988.58,
+     "p25": 1013.67,
+     "p50": 1036.44,
+     "p75": 1059.22,
+     "p95": 1084.33
+    }
+   },
+   "block": {
+    "max_drawdown": {
+     "p5": 0.012667116716329075,
+     "p25": 0.015970000000000026,
+     "p50": 0.020788572092213013,
+     "p75": 0.021919281387348,
+     "p95": 0.030167824858210325
+    },
+    "terminal_equity": {
+     "p5": 1001.6899999999999,
+     "p25": 1024.08,
+     "p50": 1036.33,
+     "p75": 1048.58,
+     "p95": 1070.8505
+    }
+   }
+  },
+  "kelly": {
+   "full_kelly": 0.1822726140196898,
+   "half_kelly": 0.0911363070098449,
+   "quarter_kelly": 0.04556815350492245,
+   "growth_per_trade_full": 0.028112767726436692,
+   "growth_per_trade_half": 0.021280071643975832,
+   "growth_per_trade_quarter": 0.012550936668409443,
+   "mean_return_per_dollar_staked": 0.3196164323770272,
+   "stake_basis": "per-trade stakes"
+  },
+  "risk_of_ruin": {
+   "0.05": {
+    "sizing_fraction": 0.05,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.011,
+    "median_terminal_equity": 769970230.4350754
+   },
+   "0.10": {
+    "sizing_fraction": 0.1,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.1421,
+    "median_terminal_equity": 6152899503438.648
+   },
+   "0.25": {
+    "sizing_fraction": 0.25,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.6766,
+    "median_terminal_equity": 38177868976305.86
+   },
+   "half_kelly": {
+    "sizing_fraction": 0.0911363070098449,
+    "ruin_level": 0.5,
+    "n_trades": 1000,
+    "n_paths": 10000,
+    "prob_ruin": 0.1104,
+    "median_terminal_equity": 1720799764428.9878
+   }
+  },
+  "small_sample": {
+   "n": 25,
+   "mean_ci90": {
+    "stat": "mean",
+    "point": 1.4531999999999996,
+    "ci": 0.9,
+    "lo": -0.4568000000000002,
+    "hi": 3.3731999999999993
+   },
+   "median_ci90": {
+    "stat": "median",
+    "point": -3.9,
+    "ci": 0.9,
+    "lo": -4.15,
+    "hi": 7.4799999999999995
+   },
+   "win_rate_ci90": {
+    "stat": "win_rate",
+    "point": 0.48,
+    "ci": 0.9,
+    "lo": 0.32,
+    "hi": 0.64
+   }
+  },
+  "annualized": {
+   "start": "2023-08-12",
+   "end": "2026-07-05",
+   "years": 2.8966461327857633,
+   "total_return": 0.03633000000000042,
+   "annualized_return": 0.012395835295414326,
+   "annualized_vol": 0.016141742367328252,
+   "sharpe": 0.7787643585163566,
+   "sortino": 0.25816436974990725,
+   "max_drawdown": 0.021168401135288457,
+   "calmar": 0.5855820293744358
+  }
+ }
+}
