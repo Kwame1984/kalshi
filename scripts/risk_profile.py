@@ -131,6 +131,10 @@ def _fmt(v: float, nd: int = 2, pct: bool = False) -> str:
     return f"{v * 100:.{nd}f}%" if pct else f"{v:.{nd}f}"
 
 
+def _money(v: float) -> str:
+    return f"{v:.0f}" if abs(v) < 1e7 else f"{v:.2e}"
+
+
 def format_report(name: str, profile: dict, warnings: list[str]) -> str:
     L: list[str] = []
     bar = "=" * 64
@@ -211,7 +215,7 @@ def format_report(name: str, profile: dict, warnings: list[str]) -> str:
             L.append(
                 f"  {label:<14} f={r['sizing_fraction']:.3f}   "
                 f"P(ruin) = {_fmt(r['prob_ruin'], 2, pct=True)}   "
-                f"median terminal eq = {r['median_terminal_equity']:.0f}"
+                f"median terminal eq = {_money(r['median_terminal_equity'])}"
             )
         L.append("")
 
