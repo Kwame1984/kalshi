@@ -28,6 +28,20 @@ TARGET_SERIES = WEATHER_SERIES + ECON_SERIES
 # exist; initial jobless claims trade as KXJOBLESS (weekly, 2021-2022 only).
 HIST_ECON_SERIES = ECON_SERIES + ["KXGDP", "KXJOBLESS"]
 
+# Sports / entertainment / politics expansion (Jul 2026). Chosen by settled-market
+# count and real volume among frequently-settling series in each category:
+#   Sports:        KXMLBGAME (MLB moneylines), KXWNBAGAME (WNBA moneylines),
+#                  KXATPMATCH (ATP tennis), KXUFCFIGHT (UFC fights)
+#   Entertainment: KXNETFLIXRANKMOVIE (weekly Netflix movie rank),
+#                  KXALBUMEQUIV (weekly album-equivalent sales brackets)
+#   Politics:      KXAPRPOTUS (weekly RCP presidential approval brackets),
+#                  KXTRUTHSOCIAL (weekly Trump Truth Social post-count brackets)
+SPORTS_CULTURE_SERIES = [
+    "KXMLBGAME", "KXWNBAGAME", "KXATPMATCH", "KXUFCFIGHT",
+    "KXNETFLIXRANKMOVIE", "KXALBUMEQUIV",
+    "KXAPRPOTUS", "KXTRUTHSOCIAL",
+]
+
 
 def upsert_market(conn: sqlite3.Connection, m: dict, series_ticker: str) -> None:
     conn.execute(
@@ -126,10 +140,17 @@ def _iso_to_ts(iso: str | None) -> int | None:
     return int(dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).timestamp())
 
 
-async def backfill(series_list: list[str], days: int, period_minutes: int = 60) -> None:
-    """Backfill settled + open markets and their candle history."""
+async def backfill(
+    series_list: list[str], days: int, period_minutes: int = 60,
+    max_markets: int | None = None, requests_per_second: float = 8.0,
+) -> None:
+    """Backfill settled + open markets and their candle history.
+
+    ``max_markets`` caps candle backfill to the N most recently closing
+    markets per series (market metadata is still stored for all)."""
     conn = connect()
-    client = KalshiClient()
+    conn.execute("PRAGMA busy_timeout=30000")  # tolerate concurrent backfills
+    client = KalshiClient(requests_per_second=requests_per_second)
     cutoff = dt.datetime.now(dt.UTC) - dt.timedelta(days=days)
     try:
         for st in series_list:
@@ -139,9 +160,16 @@ async def backfill(series_list: list[str], days: int, period_minutes: int = 60) 
                 if (_iso_to_ts(m.get("close_time")) or 0) >= cutoff.timestamp()
             ]
             print(f"{st}: {len(markets)} markets, {len(recent)} within {days}d")
+            if max_markets is not None and len(recent) > max_markets:
+                recent.sort(key=lambda m: m.get("close_time") or "", reverse=True)
+                print(f"{st}: capping candle backfill to the {max_markets} most "
+                      f"recent markets ({len(recent) - max_markets} older skipped)")
+                recent = recent[:max_markets]
             n = 0
-            for m in recent:
+            for i, m in enumerate(recent, 1):
                 n += await collect_candles(client, conn, st, m, period_minutes)
+                if i % 200 == 0:
+                    print(f"  {st}: {i}/{len(recent)} markets, {n} candles")
             print(f"{st}: {n} candles stored")
     finally:
         await client.aclose()
@@ -220,11 +248,16 @@ async def collect_historical_candles(
 
 async def backfill_historical(
     series_list: list[str], days: int | None = None, period_minutes: int = 60,
+    max_markets: int | None = None, requests_per_second: float = 8.0,
 ) -> None:
     """Backfill settled markets + candle history from the /historical/* tier
-    (data older than the live API's ~3-month rolling window)."""
+    (data older than the live API's ~3-month rolling window).
+
+    ``max_markets`` caps candle backfill to the N most recently closing
+    settled markets per series (market metadata is still stored for all)."""
     conn = connect()
-    client = KalshiClient()
+    conn.execute("PRAGMA busy_timeout=30000")  # tolerate concurrent backfills
+    client = KalshiClient(requests_per_second=requests_per_second)
     try:
         cutoff = await client.get_historical_cutoff()
         print(f"historical tier cutoff: {cutoff}")
@@ -243,6 +276,11 @@ async def backfill_historical(
             span = f"{closes[0][:10]}..{closes[-1][:10]}" if closes else "n/a"
             print(f"{st}: {len(markets)} historical markets, "
                   f"{len(settled)} settled targets ({span})")
+            if max_markets is not None and len(settled) > max_markets:
+                settled.sort(key=lambda m: m.get("close_time") or "", reverse=True)
+                print(f"{st}: capping candle backfill to the {max_markets} most "
+                      f"recent markets ({len(settled) - max_markets} older skipped)")
+                settled = settled[:max_markets]
             n = 0
             for i, m in enumerate(settled, 1):
                 n += await collect_historical_candles(client, conn, m, period_minutes)
@@ -271,20 +309,30 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     bf = sub.add_parser("backfill")
-    bf.add_argument("--series", nargs="*", default=TARGET_SERIES)
+    bf.add_argument("--series", nargs="*", default=TARGET_SERIES + SPORTS_CULTURE_SERIES)
     bf.add_argument("--days", type=int, default=90)
     bf.add_argument("--period", type=int, default=60, choices=[1, 60, 1440])
+    bf.add_argument("--max-markets", type=int, default=None,
+                    help="cap candle backfill to N most recent markets/series")
+    bf.add_argument("--rps", type=float, default=8.0,
+                    help="API requests per second")
     bh = sub.add_parser("backfill-historical")
     bh.add_argument("--series", nargs="*", default=HIST_ECON_SERIES)
     bh.add_argument("--days", type=int, default=None,
                     help="only markets closing within N days (default: all)")
     bh.add_argument("--period", type=int, default=60, choices=[1, 60, 1440])
+    bh.add_argument("--max-markets", type=int, default=None,
+                    help="cap candle backfill to N most recent markets/series")
+    bh.add_argument("--rps", type=float, default=8.0,
+                    help="API requests per second")
     sub.add_parser("snapshot")
     args = ap.parse_args()
     if args.cmd == "backfill":
-        asyncio.run(backfill(args.series, args.days, args.period))
+        asyncio.run(backfill(args.series, args.days, args.period,
+                             args.max_markets, args.rps))
     elif args.cmd == "backfill-historical":
-        asyncio.run(backfill_historical(args.series, args.days, args.period))
+        asyncio.run(backfill_historical(args.series, args.days, args.period,
+                                        args.max_markets, args.rps))
     else:
         asyncio.run(snapshot())
 
