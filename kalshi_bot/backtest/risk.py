@@ -152,7 +152,7 @@ def bootstrap_drawdown(
 
     out: dict = {
         "n_trades": n, "horizon": h, "n_paths": n_paths,
-        "starting_equity": starting_equity, "block": block,
+        "starting_equity": starting_equity, "block_len": max(1, min(block, n)),
     }
 
     # --- iid bootstrap ---

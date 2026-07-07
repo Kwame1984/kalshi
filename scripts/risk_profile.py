@@ -174,15 +174,15 @@ def format_report(name: str, profile: dict, warnings: list[str]) -> str:
             f"BOOTSTRAPPED DRAWDOWN  (${db['starting_equity']:.0f} account, "
             f"{db['n_paths']} paths x {db['horizon']} trades)"
         )
-        for scheme, label in (("iid", "iid resample"), ("block", f"block={db['block']}")):
+        for scheme, label in (("iid", "iid resample"), ("block", f"block={db['block_len']}")):
             d, t = db[scheme]["max_drawdown"], db[scheme]["terminal_equity"]
             L.append(f"  {label:<14} max drawdown  "
                      f"p5 {_fmt(d['p5'], 1, pct=True)}  p25 {_fmt(d['p25'], 1, pct=True)}  "
                      f"p50 {_fmt(d['p50'], 1, pct=True)}  p75 {_fmt(d['p75'], 1, pct=True)}  "
                      f"p95 {_fmt(d['p95'], 1, pct=True)}")
             L.append(f"  {'':<14} terminal eq   "
-                     f"p5 {t['p5']:.0f}  p25 {t['p25']:.0f}  p50 {t['p50']:.0f}  "
-                     f"p75 {t['p75']:.0f}  p95 {t['p95']:.0f}")
+                     f"p5 {_money(t['p5'])}  p25 {_money(t['p25'])}  p50 {_money(t['p50'])}  "
+                     f"p75 {_money(t['p75'])}  p95 {_money(t['p95'])}")
         L.append("")
 
     k = profile.get("kelly")
