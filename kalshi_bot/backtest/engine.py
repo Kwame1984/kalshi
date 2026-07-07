@@ -128,12 +128,40 @@ class Backtester:
 
         last_mark: dict[str, float] = {}
         settled: set[str] = set()
+        # markets settle DURING the replay as their close time passes, so
+        # position-count caps in strategies free up correctly over time
+        settle_queue = sorted(
+            ((ts, t) for t, ts in settle_at.items()), key=lambda x: x[0]
+        )
+        settle_idx = 0
 
         def mark_equity(ts: dt.datetime) -> None:
             mtm = sum(pos[t] * last_mark.get(t, 0.0) for t in pos)
             result.equity_curve.append((ts, cash + mtm))
 
+        def settle_market(ticker: str) -> None:
+            nonlocal cash
+            contracts = pos.get(ticker, 0.0)
+            if ticker in settled:
+                return
+            res = markets[ticker].get("result")
+            if res not in ("yes", "no"):
+                return
+            settled.add(ticker)
+            if contracts == 0:
+                return
+            payout = 1.0 if res == "yes" else 0.0
+            cash += contracts * payout
+            entry_cost = sum(
+                f.contracts * f.price for f in result.fills if f.ticker == ticker
+            )
+            result.settlements.append((ticker, res, contracts * payout - entry_cost))
+            pos[ticker] = 0.0
+
         for ts_int, ticker, c in events:
+            while settle_idx < len(settle_queue) and settle_queue[settle_idx][0] <= ts_int:
+                settle_market(settle_queue[settle_idx][1])
+                settle_idx += 1
             ts = dt.datetime.fromtimestamp(ts_int, dt.UTC)
             m = markets[ticker]
             bid, ask = c.get("yes_bid_close"), c.get("yes_ask_close")
@@ -156,7 +184,7 @@ class Backtester:
                     result.fills.append(fill)
             mark_equity(ts)
 
-        # settle everything with a recorded result
+        # settle whatever remains (markets whose close falls after the last candle)
         final_ts = (
             result.equity_curve[-1][0] if result.equity_curve else dt.datetime.now(dt.UTC)
         )
@@ -167,16 +195,9 @@ class Backtester:
             if res not in ("yes", "no"):
                 # unsettled: liquidate at last mark
                 cash += contracts * last_mark.get(ticker, 0.0)
+                pos[ticker] = 0.0
                 continue
-            payout = 1.0 if res == "yes" else 0.0
-            pnl = contracts * payout
-            cash += pnl
-            entry_cost = sum(
-                f.contracts * f.price for f in result.fills if f.ticker == ticker
-            )
-            result.settlements.append((ticker, res, pnl - entry_cost))
-            settled.add(ticker)
-            pos[ticker] = 0.0
+            settle_market(ticker)
         result.equity_curve.append((final_ts, cash))
         return result
 

@@ -68,6 +68,8 @@ def main() -> None:
     ap.add_argument("--series", nargs="+", required=True)
     ap.add_argument("--cash", type=float, default=1000.0)
     ap.add_argument("--max-position", type=float, default=50.0)
+    ap.add_argument("--save", action="store_true",
+                    help="write result JSON to data/backtests/ for the dashboard")
     args = ap.parse_args()
 
     strat = STRATEGIES[args.strategy]()
@@ -76,6 +78,27 @@ def main() -> None:
     losses = sorted(result.settlements, key=lambda s: s[2])[:5]
     if losses:
         print("worst settlements:", [(t, r, round(p, 2)) for t, r, p in losses])
+    if args.save:
+        import datetime as dt
+
+        from kalshi_bot.config import PROJECT_ROOT
+
+        out_dir = PROJECT_ROOT / "data" / "backtests"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        payload = {
+            "strategy": args.strategy,
+            "series": args.series,
+            "ran_at": dt.datetime.now(dt.UTC).isoformat(),
+            "starting_cash": args.cash,
+            "metrics": result.metrics(),
+            "equity_curve": [
+                (ts.isoformat(), round(v, 2)) for ts, v in result.equity_curve
+            ],
+        }
+        path = out_dir / f"{stamp}-{args.strategy}.json"
+        path.write_text(json.dumps(payload))
+        print(f"saved {path}")
 
 
 if __name__ == "__main__":

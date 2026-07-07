@@ -148,6 +148,26 @@ def _monotonicity_arbs(event: dict, markets: list[dict], legs: dict) -> list[str
     return findings
 
 
+def _log_signal(finding: str) -> None:
+    """Surface scanner findings in bot_signals so the dashboard shows them."""
+    from kalshi_bot.data.store import connect
+
+    conn = connect()
+    try:
+        conn.execute(
+            """INSERT INTO bot_signals
+               (ts, strategy, ticker, side, contracts, fair_value, market_price,
+                reason, acted)
+               VALUES (datetime('now'), 'structural_arb', ?, '', 0, 0, 0, ?, 0)""",
+            (finding.split()[1].rstrip(":"), finding),
+        )
+        conn.commit()
+    except Exception:
+        pass  # state tables may not exist before the engine's first run
+    finally:
+        conn.close()
+
+
 async def main(series_list: list[str]) -> None:
     client = KalshiClient()
     found_any = False
@@ -159,6 +179,7 @@ async def main(series_list: list[str]) -> None:
             for event in resp.get("events", []):
                 for f in await scan_event(client, event):
                     print(f"{dt.datetime.now():%H:%M:%S} {f}")
+                    _log_signal(f)
                     found_any = True
         if not found_any:
             print(f"{dt.datetime.now():%H:%M:%S} no structural arbs across "

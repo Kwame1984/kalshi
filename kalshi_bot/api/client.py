@@ -206,6 +206,48 @@ class KalshiClient:
         )
         return resp["candlesticks"]
 
+    # -- historical tier (public; markets settled before the live rolling window) --
+
+    async def get_historical_cutoff(self) -> dict:
+        """Thresholds separating the historical tier from the live API."""
+        return await self._request("GET", "/historical/cutoff")
+
+    async def get_historical_markets(
+        self,
+        series_ticker: str | None = None,
+        event_ticker: str | None = None,
+        limit: int = 1000,
+        cursor: str | None = None,
+    ) -> dict:
+        params: dict[str, Any] = {"limit": limit}
+        if series_ticker:
+            params["series_ticker"] = series_ticker
+        if event_ticker:
+            params["event_ticker"] = event_ticker
+        if cursor:
+            params["cursor"] = cursor
+        return await self._request("GET", "/historical/markets", params=params)
+
+    async def get_historical_candlesticks(
+        self,
+        market_ticker: str,
+        start_ts: int,
+        end_ts: int,
+        period_interval: int = 60,
+    ) -> list[dict]:
+        """period_interval in minutes: 1, 60, or 1440. Unlike the live endpoint,
+        prices come back as plain decimal strings without the ``_dollars`` suffix."""
+        resp = await self._request(
+            "GET",
+            f"/historical/markets/{market_ticker}/candlesticks",
+            params={
+                "start_ts": start_ts,
+                "end_ts": end_ts,
+                "period_interval": period_interval,
+            },
+        )
+        return resp["candlesticks"]
+
     # -- authenticated: portfolio & orders ------------------------------------
 
     async def get_balance(self) -> dict:

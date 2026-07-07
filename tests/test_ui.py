@@ -107,13 +107,22 @@ def test_status_empty_db(client: TestClient) -> None:
         ("/api/equity?mode=paper", "equity"),
         ("/api/markets", "markets"),
         ("/api/markets?series=KXHIGHNY&status=active", "markets"),
-        ("/api/backtests", "backtests"),
     ],
 )
 def test_endpoints_empty_db(client: TestClient, url: str, key: str) -> None:
     r = client.get(url)
     assert r.status_code == 200
     assert r.json() == {key: []}
+
+
+def test_backtests_empty_dir(client: TestClient, tmp_path: Path, monkeypatch) -> None:
+    # isolate from real data/backtests, which fills up as backtests are saved
+    from kalshi_bot.ui import server as ui_server
+
+    monkeypatch.setattr(ui_server, "BACKTEST_DIR", tmp_path / "none")
+    r = client.get("/api/backtests")
+    assert r.status_code == 200
+    assert r.json() == {"backtests": []}
 
 
 # ---------------------------------------------------------------- with data

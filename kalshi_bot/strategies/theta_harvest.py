@@ -32,6 +32,7 @@ class ThetaHarvest(Strategy):
         max_hours_to_close: float = 72.0,
         assumed_extra_win: float = 0.015,  # empirically ~0.02; margin of humility
         contracts: int = 25,
+        max_per_event: int = 1,
         max_per_series: int = 2,
         max_per_close_date: int = 3,
     ):
@@ -40,22 +41,39 @@ class ThetaHarvest(Strategy):
         self.max_hours_to_close = max_hours_to_close
         self.assumed_extra_win = assumed_extra_win
         self.contracts = contracts
+        self.max_per_event = max_per_event
         self.max_per_series = max_per_series
         self.max_per_close_date = max_per_close_date
 
+    @staticmethod
+    def _series_key(ticker_or_series: str) -> str:
+        """Series identity that survives the 2026 KX-prefix ticker rename
+        (CPIYOY-24JUL-T3.1 and KXCPIYOY-26MAY-T4.0 are the same series)."""
+        root = ticker_or_series.split("-")[0]
+        return root[2:] if root.startswith("KX") else root
+
     def _correlation_blocked(self, state: MarketState, ctx: Context) -> bool:
-        series = state.meta.get("series_ticker") or state.ticker.split("-")[0]
+        series = self._series_key(
+            state.meta.get("series_ticker") or state.ticker
+        )
+        event = state.meta.get("event_ticker") or state.ticker.rsplit("-", 1)[0]
         close_day = str(state.meta.get("close_time", ""))[:10]
-        same_series = same_day = 0
+        same_event = same_series = same_day = 0
         for t, qty in ctx.positions.items():
             if not qty:
                 continue
-            if t.split("-")[0] == series.split("-")[0]:
+            if t.startswith(event + "-"):
+                same_event += 1
+            if self._series_key(t) == series:
                 same_series += 1
             meta_close = ctx.external.get(("_close_day", t, ""), "")
             if meta_close and meta_close == close_day:
                 same_day += 1
-        return same_series >= self.max_per_series or same_day >= self.max_per_close_date
+        return (
+            same_event >= self.max_per_event
+            or same_series >= self.max_per_series
+            or same_day >= self.max_per_close_date
+        )
 
     def generate_signals(self, state: MarketState, ctx: Context) -> list[Signal]:
         if ctx.positions.get(state.ticker):
