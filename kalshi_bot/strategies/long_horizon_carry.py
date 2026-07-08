@@ -125,7 +125,9 @@ class LongHorizonCarry(Strategy):
         # edge net of taker fee at the ask — the conservative entry bound;
         # a maker fill at the bid only improves on this
         fair = min(ask + self.assumed_extra_win, 0.97)
-        if fair - ask - taker_fee(ask, 1) < self.min_net_edge:
+        # epsilon: the band's typical net edge sits exactly at min_net_edge,
+        # and float error (0.339999...+0.04) must not reject the boundary case
+        if fair - ask - taker_fee(ask, 1) < self.min_net_edge - 1e-9:
             return []
         limit = bid if self.prefer_maker else ask
         return [Signal(
