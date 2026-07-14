@@ -34,6 +34,7 @@ from kalshi_bot.execution import state
 from kalshi_bot.execution.live import LiveExecutor
 from kalshi_bot.execution.paper import PaperExecutor
 from kalshi_bot.execution.risk import RiskManager
+from kalshi_bot.execution import settle
 from kalshi_bot.execution.util import Book, now_iso, parse_orderbook, today_utc
 from kalshi_bot.strategies import STRATEGIES
 from kalshi_bot.strategies.base import MarketState, Strategy
@@ -103,6 +104,20 @@ class ExecutionEngine:
         state.set_status(self.conn, "last_heartbeat", now_iso())
         state.set_status(self.conn, "engine_running", "true")
         state.set_status(self.conn, "mode", self.mode)
+
+        # 0. settle any resolved positions before marking equity.
+        # Only for executors that track cash locally (paper); live/demo
+        # reconcile positions and balance from the exchange itself.
+        if hasattr(self.executor, "cash"):
+            try:
+                settled = await settle.settle_open_positions(
+                    self.client, self.conn, self.mode)
+                if settled:
+                    self.executor.cash += sum(r.payout for r in settled)
+                    log.info("settled %d positions, +%.2f payout",
+                             len(settled), sum(r.payout for r in settled))
+            except Exception:
+                log.exception("settlement step failed")
 
         # 1. refresh open markets for the configured series
         markets: list[dict] = []
