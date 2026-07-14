@@ -70,6 +70,19 @@ CREATE TABLE IF NOT EXISTS bot_status (
     key TEXT PRIMARY KEY,
     value TEXT
 );
+
+CREATE TABLE IF NOT EXISTS bot_settlements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts TEXT,
+    mode TEXT,
+    strategy TEXT,
+    ticker TEXT,
+    contracts REAL,
+    result TEXT,
+    payout REAL,
+    cost_basis REAL,
+    realized_pnl REAL
+);
 """
 
 
@@ -154,6 +167,28 @@ def record_equity(
         (now_iso(), mode, cash, exposure, equity),
     )
     conn.commit()
+
+
+def record_settlement(
+    conn: sqlite3.Connection,
+    mode: str,
+    strategy: str,
+    ticker: str,
+    contracts: float,
+    result: str,
+    payout: float,
+    cost_basis: float,
+    realized_pnl: float,
+    ts: str | None = None,
+) -> int:
+    cur = conn.execute(
+        "INSERT INTO bot_settlements (ts, mode, strategy, ticker, contracts,"
+        " result, payout, cost_basis, realized_pnl) VALUES (?,?,?,?,?,?,?,?,?)",
+        (ts or now_iso(), mode, strategy, ticker, contracts, result,
+         payout, cost_basis, realized_pnl),
+    )
+    conn.commit()
+    return int(cur.lastrowid)
 
 
 def apply_fill_to_position(
