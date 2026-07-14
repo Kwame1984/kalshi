@@ -37,7 +37,7 @@ cp .env.example .env            # fill in credentials when you have them
 
 | Strategy | Evidence | Status |
 |----------|----------|--------|
-| **tail_seller** — buy NO on bid-up deep-tail brackets ≤24h out (politics/econ/weather/entertainment) | ~3y backtest: **+13.2%**, 95.5% hit, max DD 16.2%, Sharpe 0.30 at full taker fees; derived from own calibration study (0-10c brackets win 0.3-1.7% vs 1.4-3.1c prices, 5 TRADEABLE flags) | **paper trading** |
+| **tail_seller** — buy NO on bid-up deep-tail brackets ≤24h out (politics/econ/weather/entertainment) | ~3y backtest: **+13.2%**, 95.5% hit, max DD 16.2%, Sharpe 0.30 at full taker fees; derived from own calibration study (0-10c brackets win 0.3-1.7% vs 1.4-3.1c prices, 5 TRADEABLE flags). First settled paper cohort (2026-07-07 weather, 16 fills): **15/16 hit but −$11.11 net** — one tail (LAX B73.5) hit and its 20:1 loss swamped the fifteen wins (n=1 cohort, illustrative not conclusive) | **paper trading** |
 | theta_harvest — econ favorites 94-99c near close | 120d: +0.74% (8/8); 5y: −9.2% (175/185) — hit rate below ~96.5% breakeven | rejected as taker; maker variant may revisit |
 | sports_devig — book-line fair value vs Kalshi MLB | pre-game divergence mean 0.55c, max 1.3c — inside fees vs soft book | scanner; needs Pinnacle (The Odds API key) |
 | options_rv — Deribit RND vs BTC brackets | all brackets within taker fees (bot-crowded) | scanner; accumulating RND history |
