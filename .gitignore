@@ -7,3 +7,6 @@ data/*.db-*
 *.pem
 .pytest_cache/
 *.egg-info/
+
+# raw per-trade backtest dumps (large; summaries live in data/risk_profiles/)
+data/backtests/*.json
