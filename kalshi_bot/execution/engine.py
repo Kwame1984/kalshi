@@ -194,6 +194,14 @@ class ExecutionEngine:
                     )
                     n_acted += int(acted)
 
+        # Save cash/equity AFTER simulated fills as well as before signals.
+        # Otherwise the next ephemeral GitHub runner would restore stale cash.
+        if self.mode == "paper":
+            equity = self.executor.snapshot_equity(marks)
+            day_start = state.equity_at_day_start(self.conn, self.mode, today_utc())
+            daily_pnl = equity - day_start if day_start is not None else 0.0
+            state.set_status(self.conn, "daily_pnl", f"{daily_pnl:.2f}")
+
         log.info("cycle done: %d markets, %d books, %d signals, %d acted, "
                  "equity=%.2f daily_pnl=%.2f%s",
                  len(markets), len(books), n_signals, n_acted, equity, daily_pnl,
