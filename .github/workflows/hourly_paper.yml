@@ -1,0 +1,39 @@
+
+name: Kalshi Hourly Paper Trading
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kalshi-hourly-paper
+  cancel-in-progress: false
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      REAL_TRADING_ENABLED: 'false'
+      PAPER_TRADING_ENABLED: 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install project
+        run: pip install -e .
+
+      - name: Run paper engine
+        run: |
+          python -m kalshi_bot.execution.engine \
+            --mode paper \
+            --strategies expiry_convergence
